@@ -48,3 +48,7 @@ func (g *PositionGenerator) Next() (Position, bool) {
 
 	return pos, true
 }
+
+func (g PositionGenerator) IsLast() bool {
+	return g.hands == [...]int{4, 4, 4, 4} && g.turn
+}

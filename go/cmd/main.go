@@ -60,19 +60,28 @@ func generateMoves(out io.Writer) {
 			boolString(pos.Players[pos.Turn].CanSplit()),
 		)
 
-		for _, move := range pos.Moves() {
+		moves := pos.Moves()
+		for i, move := range moves {
 			cloned := pos
 			cloned.Move(move)
 
 			fmt.Fprintf(
 				out,
-				`"%s": "%s",`,
+				`"%s": "%s"`,
 				move.String(),
 				cloned.CompactString(),
 			)
+
+			// avoid trailing comma
+			if i != len(moves)-1 {
+				fmt.Fprint(out, ",")
+			}
 		}
 
 		fmt.Fprint(out, "}}}")
+		if !gen.IsLast() {
+			fmt.Fprint(out, ",")
+		}
 	}
 
 	fmt.Fprint(out, "]")
